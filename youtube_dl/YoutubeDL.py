@@ -1247,6 +1247,24 @@ class YoutubeDL(object):
                     self.report_error('Cannot write metadata to JSON file ' + infofn)
                     return
 
+        if self.params.get('writenfo', False):
+            infofn = os.path.splitext(filename)[0] + '.nfo'
+            if self.params.get('nooverwrites', False) and os.path.exists(encodeFilename(infofn)):
+                self.to_screen('[info] Video description metadata is already present')
+            else:
+                self.to_screen('[info] Writing video description metadata as .nfo to: ' + infofn)
+                try:
+                    from xml.sax.saxutils import escape
+                    with io.open(encodeFilename(infofn), 'w', encoding='utf-8') as nfofile:
+                        nfofile.write('<movie>')
+                        nfofile.write('<title>%s</title>' % escape(info_dict['title']))
+                        if 'thumbnail' in info_dict:
+                            nfofile.write('<thumbnail>%s</thumbnail>' % escape(info_dict['thumbnail']))
+                        nfofile.write('</movie>')
+                except (OSError, IOError):
+                    self.report_error('Cannot write metadata to .nfo file ' + infofn)
+                    return
+
         self._write_thumbnails(info_dict, filename)
 
         if not self.params.get('skip_download', False):

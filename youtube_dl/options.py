@@ -619,6 +619,10 @@ def parseOpts(overrideArguments=None):
         action='store_true', dest='writeinfojson', default=False,
         help='write video metadata to a .info.json file')
     filesystem.add_option(
+        '--write-nfo',
+        action='store_true', dest='writenfo', default=False,
+        help='write video metadata to a .nfo file')
+    filesystem.add_option(
         '--write-annotations',
         action='store_true', dest='writeannotations', default=False,
         help='write video annotations to a .annotation file')
